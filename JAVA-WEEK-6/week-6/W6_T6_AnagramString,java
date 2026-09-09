@@ -1,0 +1,40 @@
+import java.util.*;
+
+public class W6_T6_FindAnagrams {
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> result = new ArrayList<>();
+        if (s.length() < p.length()) return result;
+
+        int[] pCount = new int[26];
+        int[] sCount = new int[26];
+
+        // Count frequency of characters in p
+        for (char c : p.toCharArray()) {
+            pCount[c - 'a']++;
+        }
+
+        // Sliding window over s
+        for (int i = 0; i < s.length(); i++) {
+            sCount[s.charAt(i) - 'a']++;
+
+            // Shrink window if size exceeds p.length()
+            if (i >= p.length()) {
+                sCount[s.charAt(i - p.length()) - 'a']--;
+            }
+
+            // Compare frequency arrays
+            if (Arrays.equals(pCount, sCount)) {
+                result.add(i - p.length() + 1);
+            }
+        }
+
+        return result;
+    }
+
+    // Quick test
+    public static void main(String[] args) {
+        W6_T6_FindAnagrams obj = new W6_T6_FindAnagrams(); // ✅ fixed class name
+        System.out.println(obj.findAnagrams("cbaebabacd", "abc")); // [0, 6]
+        System.out.println(obj.findAnagrams("abab", "ab"));        // [0, 1, 2]
+    }
+}
